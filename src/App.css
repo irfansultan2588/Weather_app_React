@@ -1,38 +1,122 @@
-.App {
-  text-align: center;
+* {
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+    background-color: black !important;
+    font-family: 'Times New Roman', Times, serif;
+
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+
+.card {
+    border: 1px solid black;
+    border-radius: 30px;
+    margin: 20px;
+    padding: 20px;
+    width: 20%;
+    background-color: goldenrod !important;
+    text-align: center;
+
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.heading {
+    font-size: 50px;
+    letter-spacing: 5px;
+    color: goldenrod;
 }
 
-.App-link {
-  color: #61dafb;
+form {
+
+    text-align: center;
+    margin: auto;
+    margin-top: 5rem;
+
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input {
+    border: none;
+    border-bottom: 3px solid goldenrod;
+    outline: none;
+    background-color: black;
+    font-size: 40px;
+    font-weight: bold;
+    width: 25%;
+    color: goldenrod;
 }
+
+.box {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+}
+
+button {
+    padding: 7px;
+    border: 3px solid black;
+    font-size: large;
+    background-color: goldenrod;
+    margin-left: 1rem;
+    border-radius: 30px;
+
+}
+
+
+span {
+    font-size: 40px;
+    color: goldenrod;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+body {
+    background-color: gray !important;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form_container {
+    display: flex;
+    margin-top: 2rem;
+}
+
+input {
+    text-align: center;
+    border: none !important;
+    outline: none !important;
+    border-bottom: 2px solid black;
+} */
