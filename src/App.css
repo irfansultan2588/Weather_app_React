@@ -5,11 +5,32 @@
 }
 
 body {
-    background-color: black !important;
+    background-color: lightgray !important;
     font-family: 'Times New Roman', Times, serif;
-
 }
 
+.nav_2 {
+    background-color: gray;
+    color: #fff;
+}
+
+.nav_2>ul {
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
+}
+
+.nav_2>ul>li {
+    margin: 10px;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    background-color: goldenrod;
+}
+
+.nav_2>ul>li>a {
+    text-decoration: none;
+    color: black;
+}
 
 .card {
     border: 1px solid black;
@@ -69,54 +90,3 @@ span {
     font-size: 40px;
     color: goldenrod;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 
-body {
-    background-color: gray !important;
-}
-
-.container {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-}
-
-.form_container {
-    display: flex;
-    margin-top: 2rem;
-}
-
-input {
-    text-align: center;
-    border: none !important;
-    outline: none !important;
-    border-bottom: 2px solid black;
-} */
