@@ -3,10 +3,20 @@ import cors from "cors"
 // import { nanoid } from 'nanoid'
 import mongoose from 'mongoose';
 import { stringToHash, varifyHash, } from "bcrypt-inzi"
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+
+
+const SECRET = process.env.SECRET || "topsecret";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+
+app.use(cors({
+    origin: ['http://localhost:3001', "*"],
+    credentials: true
+}));
 
 const port = process.env.PORT || 3000;
 
@@ -114,23 +124,6 @@ app.post("/signup", (req, res) => {
 });
 
 
-app.get("/users", async (req, res) => {
-
-    try {
-        let allUser = await userModel.find({}).exec();
-        res.send(allUser);
-
-    } catch (error) {
-        res.status(500).send({ message: "error getting users" });
-    }
-})
-
-
-
-// console.log(userBase, "userBase")
-
-// res.status(200).send({ message: "user is created" });
-
 app.post("/login", (req, res) => {
 
     let body = req.body;
@@ -147,42 +140,146 @@ app.post("/login", (req, res) => {
     }
 
 
-    userModel.findOne({ email: body.email }, (err, data) => {
+    userModel.findOne({ email: body.email },
+        { email: 1, firstName: 1, lastName: 1, password: 1, },
+        (err, data) => {
+            if (!err) {
+                console.log("data: ", data);
+
+                if (data) { // user found
+
+                    varifyHash(body.password, data.password).then(isMatched => {
+
+                        if (isMatched) {
+                            var token = jwt.sign({
+                                _id: data._id,
+                                email: data.email,
+                                iat: Math.floor(Date.now() / 1000) - 30,
+
+                                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24),
+                            }, SECRET);
+
+                            console.log("token:", token);
+
+                            res.cookie('token', token, {
+                                maxAge: 86_400_000,
+                                httpOnly: true
+                            });
+
+                            res.send({
+                                message: "Login successful",
+                                profile: {
+                                    email: data.email,
+                                    firstName: data.firstName,
+                                    lastName: data.lastName,
+                                    _id: data._id
+
+                                }
+
+
+                            });
+
+                            return;
+                        } else {
+
+                            console.log("user not found: ", data);
+                            res.status(401).send({ message: "Incorrect email.or password," });
+                            return;
+
+                        }
+                    })
+
+
+                } else { // user not found
+
+                    console.log("user not found: ", data);
+                    res.status(401).send({ message: "Incorrect email.or password," });
+                    return;
+
+
+
+                }
+            } else {
+                console.log("db error: ", err);
+                res.status(500).send({ message: "Login failed please try later" });
+            }
+        })
+});
+
+app.post("/logout", (req, res) => {
+
+
+    res.cookie('token', '', {
+        maxAge: 0,
+        httpOnly: true
+    });
+
+    res.send({ message: "Logout successful", });
+
+
+
+
+
+});
+
+
+app.use(function (req, res, next) {
+    console.log("req.cookies: ", req.cookies);
+
+    if (!req.cookies.token) {
+        res.status(401).send({
+            message: "include http-only credentials with every request"
+        })
+        return;
+    }
+    jwt.verify(req.cookies.token, SECRET, function (err, decodedData) {
         if (!err) {
-            console.log("data: ", data);
 
-            if (data) { // user found
+            console.log("decodedData: ", decodedData);
 
-                varifyHash(body.password, data.password).then(isMatched => {
+            const nowDate = new Date().getTime() / 1000;
 
-                    if (isMatched) {
-                        res.send({ message: "Login successful" });
-                        return;
-                    } else {
+            if (decodedData.exp < nowDate) {
+                res.status(401).send("token expired")
+            } else {
 
-                        console.log("user not found: ", data);
-                        res.status(401).send({ message: "Incorrect email.or password," });
-                        return;
-
-                    }
-                })
-
-
-            } else { // user not found
-
-                console.log("user not found: ", data);
-                res.status(401).send({ message: "Incorrect email.or password," });
-                return;
-
-
-
+                req.body.token = decodedData
+                next();
             }
         } else {
-            console.log("db error: ", err);
-            res.status(500).send({ message: "Login failed please try later" });
+            res.status(401).send("invalid token")
         }
-    })
-});
+    });
+})
+
+app.get("/users", async (req, res) => {
+
+    try {
+        let allUser = await userModel.find({}).exec();
+        res.send(allUser);
+
+    } catch (error) {
+        res.status(500).send({ message: "error getting users" });
+    }
+})
+
+
+app.get("/profile", async (req, res) => {
+
+    try {
+        let user = await userModel.findOne({ _id: req.body.token._id }).exec();
+        res.send(user);
+
+    } catch (error) {
+        res.status(500).send({ message: "error getting users" });
+    }
+})
+
+
+
+// console.log(userBase, "userBase")
+
+// res.status(200).send({ message: "user is created" });
 
 
 // })
@@ -212,7 +309,7 @@ app.listen(port, () => {
 
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
-let dbURI = 'mongodb+srv://abc:abc@cluster0.jqfzaar.mongodb.net/socialMediaBase?retryWrites=true&w=majority';
+let dbURI = process.env.MONGODBURI || 'mongodb+srv://abc:abc@cluster0.jqfzaar.mongodb.net/socialMediaBase?retryWrites=true&w=majority';
 mongoose.connect(dbURI);
 
 ////////////////mongodb connected disconnected events///////////////////////////////////////////////

@@ -13,6 +13,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { useContext } from "react";
+import { GlobalContext } from '../Context';
 
 function Copyright(props) {
     return (
@@ -30,6 +32,13 @@ function Copyright(props) {
 const theme = createTheme();
 
 function Login() {
+
+
+    let { state, dispatch } = useContext(GlobalContext);
+
+
+
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -44,8 +53,13 @@ function Login() {
             let response = await axios.post(`${baseUrl}/login`, {
                 email: data.get('email'),
                 password: data.get('password')
+            }, {
+                withCredentials: true
             })
-            console.log("response", response.data.message);
+            console.log("response", response.data);
+
+            dispatch({ type: "USER_LOGIN", payload: response.data.profile })
+
 
         } catch (e) {
             console.log("Error in api", e);
@@ -69,7 +83,7 @@ function Login() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        Login
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
@@ -102,7 +116,7 @@ function Login() {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Sign In
+                            LogIn
                         </Button>
                         <Grid container>
                             <Grid item xs>

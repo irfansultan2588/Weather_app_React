@@ -10,6 +10,8 @@ body {
 }
 
 .nav_2 {
+    display: flex;
+    justify-content: space-between;
     background-color: gray;
     color: #fff;
 }
@@ -25,6 +27,12 @@ body {
     padding: 5px 10px 5px 10px;
     border-radius: 10px;
     background-color: goldenrod;
+}
+
+.nav_2>.userName {
+    color: black;
+    padding: 20px;
+
 }
 
 .nav_2>ul>li>a {
