@@ -1,6 +1,5 @@
 import express from "express"
 import cors from "cors"
-// import { nanoid } from 'nanoid'
 import mongoose from 'mongoose';
 import { stringToHash, varifyHash, } from "bcrypt-inzi"
 import jwt from 'jsonwebtoken';
@@ -20,7 +19,6 @@ app.use(cors({
 
 const port = process.env.PORT || 3000;
 
-// let userBase = [];
 
 const userSchema = new mongoose.Schema({
     firstName: String,
@@ -277,12 +275,7 @@ app.get("/profile", async (req, res) => {
 
 
 
-// console.log(userBase, "userBase")
 
-// res.status(200).send({ message: "user is created" });
-
-
-// })
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
