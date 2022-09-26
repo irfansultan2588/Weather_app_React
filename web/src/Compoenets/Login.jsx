@@ -54,7 +54,11 @@ function Login() {
                 email: data.get('email'),
                 password: data.get('password')
             }, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    "Content-Type": "application/json"
+                }
             })
             console.log("response", response.data);
 

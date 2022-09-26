@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-    origin: ['http://localhost:3000', "*"],
+    origin: ['https://weatherappreact2588.netlify.app', '*'],
     credentials: true
 }));
 
@@ -154,7 +154,7 @@ app.post("/login", (req, res) => {
                                 email: data.email,
                                 iat: Math.floor(Date.now() / 1000) - 30,
 
-                                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24),
+                                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 8760),
                             }, SECRET);
 
                             console.log("token:", token);
