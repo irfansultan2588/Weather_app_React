@@ -16,6 +16,7 @@ import Profile from './Compoenets/Profile';
 import React, { useEffect, useContext } from 'react'
 import { GlobalContext } from './Context';
 import axios from 'axios';
+import loddingimage from './assets/loading-1.webp'
 
 
 
@@ -105,8 +106,13 @@ function App() {
         {(state.isLogin === null) ?
 
           <>
+            <Route path="*" element={
+              <div className='image_container234'>
+                <img src={loddingimage} alt='loding_image' />
+              </div>
+            } />
 
-            Loding......
+
           </>
           :
           null
