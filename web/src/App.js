@@ -30,7 +30,7 @@ function App() {
 
     const getProfile = async () => {
 
-      let baseUrl = "http://localhost:3000";
+      let baseUrl = "https://odd-lime-termite-tie.cyclic.app";
 
       try {
         let response = await axios({
@@ -118,26 +118,11 @@ function App() {
           null
         }
 
-
-
-
-
       </Routes>
 
     </Router >
 
   );
-
-
-
-
-
-
-
-
-
-
-
 }
 
 export default App;
