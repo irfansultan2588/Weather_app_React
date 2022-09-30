@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-    origin: ['https://odd-lime-termite-tie.cyclic.app', '*'],
+    origin: ['weatherappreact2588.netlify.app', '*'],
     credentials: true
 }));
 
